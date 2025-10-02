@@ -28,5 +28,13 @@ fastqc *.fastq
 
 The output of this should be the HTML to the FastQC 
 
+#in ~/raw_data
+
+multiqc . -f 
+firefox multiqc_report.html
+
+#this is not required, but it generates a nice comparison of all the fastqc data into one report
+
+
 
 
