@@ -13,7 +13,10 @@ cd ~/BIFS_619_Group_Project
 mkdir raw_data
 ```
 
-now run the following to download the Fasta file
+Now run the following to download the Fasta file
+the SSR IDs we will be focusing on are:
+
+DRR34568, DRR034570, and DRR034563
 
 ```bash
 cd ~/raw_data
@@ -24,4 +27,6 @@ fastqc *.fastq
 ```
 
 The output of this should be the HTML to the FastQC 
+
+
 
