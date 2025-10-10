@@ -54,7 +54,7 @@ fastp \
 fastp \
   -i DRR034570_1.fastq \
   -I DRR034570_2.fastq \
-  -o ~/raw_dataDRR034570_1.clean.fastq \
+  -o ~/raw_data/DRR034570_1.clean.fastq \
   -O ~/raw_data/DRR034570_2.clean.fastq \
   -h ~/raw_data/DRR034570.html \
   -j ~/raw_data/DRR034570.json \
@@ -64,7 +64,7 @@ fastp \
 fastp \
   -i DRR034563_1.fastq \
   -I DRR034563_2.fastq \
-  -o ~/raw_dataDRR034563_1.clean.fastq \
+  -o ~/raw_data/DRR034563_1.clean.fastq \
   -O ~/raw_data/DRR034563_2.clean.fastq \
   -h ~/raw_data/DRR034563.html \
   -j ~/raw_data/DRR034563.json \
