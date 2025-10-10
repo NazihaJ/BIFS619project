@@ -54,25 +54,27 @@ fastp \
 fastp \
   -i DRR034570_1.fastq \
   -I DRR034570_2.fastq \
-  -o ~/raw_data/DRR034570_1.clean.fastq \
-  -O ~/raw_data/DRR034570_2.clean.fastq \
-  -h ~/raw_data/DRR034570.html \
-  -j ~/raw_data/DRR034570.json \
+  -o ~/BIFS_619_Group_Project/raw_data/DRR034570_1.clean.fastq \
+  -O ~/BIFS_619_Group_Project/raw_data/DRR034570_2.clean.fastq \
+  -h ~/BIFS_619_Group_Project/raw_data/DRR034570.html \
+  -j ~/BIFS_619_Group_Project/raw_data/DRR034570.json \
   --length_required 50
 
 #DRR034563
 fastp \
   -i DRR034563_1.fastq \
   -I DRR034563_2.fastq \
-  -o ~/raw_data/DRR034563_1.clean.fastq \
-  -O ~/raw_data/DRR034563_2.clean.fastq \
-  -h ~/raw_data/DRR034563.html \
-  -j ~/raw_data/DRR034563.json \
+  -o ~/BIFS_619_Group_Project/raw_data/DRR034563_1.clean.fastq \
+  -O ~/BIFS_619_Group_Project/raw_data/DRR034563_2.clean.fastq \
+  -h ~/BIFS_619_Group_Project/raw_data/DRR034563.html \
+  -j ~/BIFS_619_Group_Project/raw_data/DRR034563.json \
   --length_required 50
 
+#move the clean files into cleaned_reads
 mv ~/BIFS_619_Group_Project/raw_data/*.clean.fastq ~/BIFS_619_Group_Project/cleaned_reads
 
 #this should run fastqc again on the cleaned reads and use multiqc to compile them into an html file that can be opened with firefox
+
 cd ~/BIFS_619_Group_Project/cleaned_reads
 fastqc *.fastq
 multiqc . -f -n cleaned_multiqc_report.html
