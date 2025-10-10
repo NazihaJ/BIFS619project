@@ -44,11 +44,11 @@ mkdir -p ~/BIFS_619_Group_Project/cleaned_reads
 fastp \
 -i DRR034568_1.fastq \
 -I DRR034568_2.fastq \
--o ~/raw_data/DRR034568_1.clean.fastq \
--O ~/raw_data/DRR034568_2.clean.fastq \
--h ~/raw_data/DRR034568.html \
- -j ~/raw_data/DRR034568.json \
-      --length_required 50
+-o ~/BIFS_619_Group_Project/raw_data/DRR034568_1.clean.fastq \
+-O ~/BIFS_619_Group_Project/raw_data/DRR034568_2.clean.fastq \
+-h ~/BIFS_619_Group_Project/raw_data/DRR034568.html \
+-j ~/BIFS_619_Group_Project/raw_data/DRR034568.json \
+ --length_required 50
 
 #DRR034570
 fastp \
