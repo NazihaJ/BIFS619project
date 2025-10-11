@@ -27,14 +27,15 @@ fastqc *.fastq
 ```
 
 The output of this should be the HTML to the FastQC 
-
+```bash
 #in ~/raw_data
 
 multiqc . -f 
 firefox multiqc_report.html
-
+```
 #this is not required, but it generates a nice comparison of all the fastqc data into one report
 
+```bash
 sudo apt install fastp
 
 mkdir -p ~/BIFS_619_Group_Project/cleaned_reads
@@ -69,7 +70,8 @@ fastp \
   -h ~/BIFS_619_Group_Project/raw_data/DRR034563.html \
   -j ~/BIFS_619_Group_Project/raw_data/DRR034563.json \
   --length_required 50
-
+```
+```bash
 #move the clean files into cleaned_reads
 mv ~/BIFS_619_Group_Project/raw_data/*.clean.fastq ~/BIFS_619_Group_Project/cleaned_reads
 
@@ -79,6 +81,6 @@ cd ~/BIFS_619_Group_Project/cleaned_reads
 fastqc *.fastq
 multiqc . -f -n cleaned_multiqc_report.html
 firefox cleaned_multiqc_report.html & 
-
+```
 
 
