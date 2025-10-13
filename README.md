@@ -82,5 +82,10 @@ fastqc *.fastq
 multiqc . -f -n cleaned_multiqc_report.html
 firefox cleaned_multiqc_report.html & 
 ```
+```bash
+#Try this for compressing into .gz, it shouldn't take very long because it uses multiple CPUs
+sudo apt install pigz
+pigz DRR034563_1.clean.fastq
+```
 
 
