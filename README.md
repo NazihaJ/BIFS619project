@@ -99,12 +99,14 @@ Go to the project folder
 Then command editing usign nano
 
 ```bash
+# execute this command in terminal
 nano run_all_spades.sh
+```
+This will pull up a text editor, you can copy the following directly into the edit page
 
-#copy this to the edit page
-
+```bash
 #!/bin/bash
-#The command to execute is: run_all_spades.sh
+#The command to executes run_all_spades.sh
 #This will sequentially builds genome assemblies for all cleaned read pairs using SPAdes
 
 #directories given that the clean reads are in the following folder. If they arent create a folder and call it cleaned_reads.
@@ -133,7 +135,11 @@ Execute command in terminal
 *nohup is to make sure it keeps running even if you lose internet connection like what happened to me*
 
 ```bash
+#run the following two commands, you can remove the notes if you feel so inclined
+# this gives permission to execute command
 chmod +x run_all_spades.sh
+
+#this is will allow the script to run in the background even if things get disconnected
 nohup ./run_all_spades.sh > batch_spades.log 2>&1 &
 ```
  Now you wait around 8 hours.. or less if you have more CPU than I do. 
