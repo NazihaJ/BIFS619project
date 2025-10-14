@@ -41,7 +41,7 @@ sudo apt install fastp
 mkdir -p ~/BIFS_619_Group_Project/cleaned_reads
 
 #assuming you’re in /raw_data
-#Clean DRR034568
+#Clean DRR034568, if you're cleaning .gz files - just add .gz to the filenames below except for html and json
 fastp \
 -i DRR034568_1.fastq \
 -I DRR034568_2.fastq \
