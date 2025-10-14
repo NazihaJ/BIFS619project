@@ -18,11 +18,11 @@ the SSR IDs we will be focusing on are:
 
 DRR34568, DRR034570, and DRR034563
 
-```bash
+```bash 
 cd ~/raw_data
-fasterq-dump DRR034568 --split-files --threads 6
-fasterq-dump DRR034570 --split-files --threads 6
-fasterq-dump DRR034563 --split-files --threads 6
+fasterq-dump DRR034568 --split-files --threads 6 && gzip DRR034568_*.fastq
+fasterq-dump DRR034570 --split-files --threads 6 && gzip DRR034570_*.fastq
+fasterq-dump DRR034563 --split-files --threads 6 && gzip DRR034563_*.fastq
 fastqc *.fastq
 ```
 
@@ -87,5 +87,56 @@ firefox cleaned_multiqc_report.html &
 sudo apt install pigz
 pigz DRR034563_1.clean.fastq
 ```
+
+##Assembly using SPades
+
+Go to the project folder
+
+```bash
+~/BIFS_619_Group_Project
+```
+
+Then command editing usign nano
+
+```bash
+nano run_all_spades.sh
+
+#copy this to the edit page
+
+#!/bin/bash
+#The command to execute is: run_all_spades.sh
+#This will sequentially builds genome assemblies for all cleaned read pairs using SPAdes
+
+#directories given that the clean reads are in the following folder. If they arent create a folder and call it cleaned_reads.
+CLEAN_DIR="/home/StudentFirst/BIFS_619_Group_Project/cleaned_reads"
+OUT_DIR="/home/StudentFirst/BIFS_619_Group_Project/02_spades_assembly"
+
+#this is the output directory
+mkdir -p $OUT_DIR
+
+#samples
+SAMPLES=("DRR034563" "DRR034568" "DRR034570")
+
+#loop
+for sample in "${SAMPLES[@]}"; do
+    spades.py \
+        -1 ${CLEAN_DIR}/${sample}_1.clean.fastq.gz \
+        -2 ${CLEAN_DIR}/${sample}_2.clean.fastq.gz \
+        -o ${OUT_DIR}/${sample} \
+        -t 4 \
+        -m 12
+done
+```
+To exit do Crtl O, Enter, Crtl X
+
+Execute command in terminal 
+*nohup is to make sure it keeps running even if you lose internet connection like what happened to me*
+
+```bash
+chmod +x run_all_spades.sh
+nohup ./run_all_spades.sh > batch_spades.log 2>&1 &
+```
+ Now you wait around 8 hours.. or less if you have more CPU than I do. 
+
 
 
