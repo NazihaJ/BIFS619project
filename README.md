@@ -88,7 +88,7 @@ sudo apt install pigz
 pigz DRR034563_1.clean.fastq
 ```
 
-##Assembly using SPades
+## Assembly using SPades
 
 Go to the project folder
 
