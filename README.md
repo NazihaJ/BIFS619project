@@ -147,6 +147,7 @@ nohup ./run_all_spades.sh > batch_spades.log 2>&1 &
 QUAST
 ```bash
 #evaluating assembly quality
+#in the quast directory I entered the following
 ./quast.py ~/BIFS_619_Group_Project/02_spades_assembly/DRR034563/scaffolds.fasta -o ~/BIFS_619_Group_Project/02_spades_assembly/DRR034563/quast_result
 
 ./quast.py ~/BIFS_619_Group_Project/02_spades_assembly/DRR034568/scaffolds.fasta -o ~/BIFS_619_Group_Project/02_spades_assembly/DRR034568/quast_result
