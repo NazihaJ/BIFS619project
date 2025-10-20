@@ -144,5 +144,14 @@ nohup ./run_all_spades.sh > batch_spades.log 2>&1 &
 ```
  Now you wait around 8 hours.. or less if you have more CPU than I do. 
 
+QUAST
+```bash
+#evaluating assembly quality
+./quast.py ~/BIFS_619_Group_Project/02_spades_assembly/DRR034563/scaffolds.fasta -o ~/BIFS_619_Group_Project/02_spades_assembly/DRR034563/quast_result
 
+./quast.py ~/BIFS_619_Group_Project/02_spades_assembly/DRR034568/scaffolds.fasta -o ~/BIFS_619_Group_Project/02_spades_assembly/DRR034568/quast_result
+
+./quast.py ~/BIFS_619_Group_Project/02_spades_assembly/DRR034570/scaffolds.fasta -o ~/BIFS_619_Group_Project/02_spades_assembly/DRR034570/quast_result
+
+```
 
