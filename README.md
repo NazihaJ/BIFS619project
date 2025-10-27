@@ -200,9 +200,68 @@ sam into bam
 
 
 # Heat Map
+Install R and then install the following packages to R to make the heat map from the featured gene counts.
+```bash 
+install.packages(c("dplyr", "tidyr", "ggplot2", "pheatmap"))
+ 
+setwd("~/BIFS_619_Group_Project")
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(pheatmap)
+ 
+
+f1$Geneid <- sub("^.*_", "", f1$Geneid)
+f2$Geneid <- sub("^.*_", "", f2$Geneid)
+f3$Geneid <- sub("^.*_", "", f3$Geneid)
+ 
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(pheatmap)
+
+```
 ```bash
-
-
+# merge
+counts <- f1 %>%
+  select(Geneid, DRR034563 = ncol(f1)) %>%
+  left_join(f2 %>% select(Geneid, DRR034568 = ncol(f2)), by = "Geneid") %>%
+  left_join(f3 %>% select(Geneid, DRR034570 = ncol(f3)), by = "Geneid")
+ 
+#ensure numeric
+counts_num <- counts
+counts_num[, -1] <- lapply(counts_num[, -1], function(x) as.numeric(as.character(x)))
+ 
+#convert to matrix
+counts_mat <- as.matrix(counts_num[,-1])
+rownames(counts_mat) <- counts_num$Geneid
+ 
+# check numeric values now
+summary(counts_mat)
+ 
+#select top 10 genes
+top10 <- counts_mat[order(rowSums(counts_mat, na.rm = TRUE), decreasing = TRUE)[1:10], ]
+```
+The following code is for obtaining the heat map with pink–blue color scale, axis labels, and title.
+```bash
+# define pink-blue palette
+pink_blue <- colorRampPalette(c("deepskyblue3", "white", "deeppink3"))(50)
+ 
+#generate heatmap
+pheatmap(log2(top10 + 1),
+         color = pink_blue,
+         cluster_rows = TRUE,
+         cluster_cols = TRUE,
+         scale = "row",
+         main = "Top 10 Expressed Genes Across E. coli Samples",
+         labels_row = rownames(top10),
+         labels_col = colnames(top10),
+         angle_col = 45,
+         fontsize = 10,
+         fontsize_row = 9,
+         fontsize_col = 10,
+         legend = TRUE,
+         legend_labels = "Expression Level (log2 scaled)")
 ```
 
 
