@@ -180,24 +180,93 @@ repeat the following for each sample in their respective directories
 ```
 
 # HISAT2 Alignment 
-```bash
+This step aligns the cleaned RNA-seq reads against the assembled
+E. coli contigs (from SPAdes) using the HISAT2 indices created earlier.
+```bash 
+#Example running for sample DRR034568
+cd ~/BIFS_619_Group_Project/02_spades_assembly/DRR034568 
 
-
+#Run HISAT2 alignment
+hisat2 -x DRR034568_index \
+  -1 ~/BIFS_619_Group_Project/cleaned_reads/DRR034568_1.clean.fastq.gz \
+  -2 ~/BIFS_619_Group_Project/cleaned_reads/DRR034568_2.clean.fastq.gz \
+  -S DRR034568.sam \
+  -p 6 
 ```
+hisat2_${ID}.log → run summary with % alignment, read counts, etc.
 
-sam into bam
+This step was repeated for DRR034568 and DRR034570 to generate the .sam files.
+The disk space is very limited so the .sam file is converted to .bam and removed for space. Then the .bam can be sorted. 
+```bash
+samtools view -bS -o DRR034568.bam DRR034568.sam
+samtools sort -o DRR034568_sorted.bam DRR034568.bam
+
+#move the sorted bams into a sorted_bam directory to generate a table/plot with total reads and mapping percentage.
+mkdir ~/BIFS_619_Group_Project/sorted_bam
+mv DRR034568_sorted.bam ~/BIFS_619_Group_Project/sorted_bam
+
+#repeated for DRR034563 and DRR034570
+```
 ### Alignment rate per sample
 ```bash
+cd ~/BIFS_619_Group_Project/sorted_bam
+#in the sorted_bam directory, copy and past the following to generate each sample_flagstat.txt
 
+for bam in *.bam; do
+    sample=$(basename "$bam" .bam)
+    samtools flagstat "$bam" > "${sample}_flagstat.txt"
+done
 
+#copy and paste the following to generate a CSV of the sample, total_reads, mapped_reads, and mapping_percent.
+
+echo "Sample,Total_Reads,Mapped_Reads,Mapping_Percent" > alignment_summary.csv
+for file in *_flagstat.txt; do
+    sample=${file%_flagstat.txt}
+    total=$(grep "in total" $file | awk '{print $1}')
+    mapped=$(grep "mapped (" $file | head -n1 | awk '{print $1}')
+    percent=$(grep "mapped (" $file | head -n1 | sed 's/.*(\(.*%\).*/\1/')
+    echo "$sample,$total,$mapped,$percent" >> alignment_summary.csv
+done
+
+#check the output
+cat alignment_summary.csv 
 ```
-### Total read count
+### Total read count and mapping percentage
 ```bash
+#If you don’t have gnuplot
+sudo apt install gnuplot-nox # version 5.4.2+dfsg2-2
 
+#copy and paste the following code block to generate a .png of the mapping percentage
 
+gnuplot -e "
+set terminal png size 800,400;
+set output 'mapping_percentage.png';
+set title 'HISAT2 Alignment Rate per Sample';
+set boxwidth 0.5;
+set style fill solid;
+set ylabel 'Mapping %';
+set yrange [0:100];
+set datafile separator ',';
+plot 'alignment_summary.csv' using 0:4:xtic(1) with boxes lc rgb 'skyblue' title 'Mapping %';
+"
+
+#copy and paste the following code block to generate a .png plot for the total reads 
+gnuplot -e "
+set terminal pngcairo size 900,500 enhanced font 'Arial,12' background rgb 'white';
+set output 'total_reads.png';
+set title 'HISAT2 Total Reads per Sample';
+set ylabel 'Total Reads';
+set boxwidth 0.5;
+set style fill solid;
+set datafile separator ',';
+set xtics rotate by -45;
+plot 'alignment_summary.csv' using 2:xtic(1) with boxes lc rgb '#1f77b4' title 'Total Reads';
+"
+
+# to view these .pngs you can use the following commands
+display total_reads.png
+display mapping_percentage.png
 ```
-
-
 
 # Heat Map
 Install R and then install the following packages to R to make the heat map from the featured gene counts.
