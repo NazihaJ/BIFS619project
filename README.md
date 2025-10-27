@@ -156,4 +156,63 @@ QUAST
 
 ```
 
-test commit
+Tried to install Prokka directly in the VM environment using Conda and Mamba for dependency resolution. It didnt work for me but this is how I would have approached it.  
+
+```bash
+conda install -n base -c conda-forge mamba
+mamba create -n prokka_env -c bioconda -c conda-forge prokka
+
+# Activate environment and attempt database setup
+conda activate prokka_env
+prokka --setupdb
+prokka --listdb
+```
+
+HISAT2 Alignment _shannons version
+This creates the conda environment using alignment tools. This uses the contig.fasta file from spades to create genome index for alignment
+
+```bash
+conda create -n rnaseq_env -c bioconda -c conda-forge hisat2 bowtie2 samtools subread -y
+conda activate rnaseq_env
+cd ~/BIFS_619_Group_Project/02_spades_assembly/DRR034563
+hisat2-build contigs.fasta DRR034563_index
+repeat the following for each sample in their respective directories 
+```
+
+# HISAT2 Alignment 
+```bash
+
+
+```
+
+sam into bam
+### Alignment rate per sample
+```bash
+
+
+```
+### Total read count
+```bash
+
+
+```
+
+
+
+# Heat Map
+```bash
+
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
