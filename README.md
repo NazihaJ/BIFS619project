@@ -176,12 +176,12 @@ conda create -n rnaseq_env -c bioconda -c conda-forge hisat2 bowtie2 samtools su
 conda activate rnaseq_env
 cd ~/BIFS_619_Group_Project/02_spades_assembly/DRR034563
 hisat2-build contigs.fasta DRR034563_index
-repeat the following for each sample in their respective directories 
+ 
 ```
 
 # HISAT2 Alignment 
 This step aligns the cleaned RNA-seq reads against the assembled
-E. coli contigs (from SPAdes) using the HISAT2 indices created earlier.
+E. coli contigs (from SPAdes) using the HISAT2 indices created earlier. Repeat the following for each sample in their respective directories.
 ```bash 
 #Example running for sample DRR034568
 cd ~/BIFS_619_Group_Project/02_spades_assembly/DRR034568 
