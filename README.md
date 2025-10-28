@@ -344,17 +344,77 @@ featureCounts_DRR034563.txt
 featureCounts_DRR034568.txt
 featureCounts_DRR034570.txt
 
+In the first bash it will go libraries then paste the following:
+
 ```bash
 library(dplyr)
 library(purrr)
 library(pheatmap)
 
+The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+Error in reduce(list(f1, f2, f3), full_join, by = "Geneid") : 
+  could not find function "reduce"
+> library(purrr)
+> counts <- reduce(list(f1, f2, f3), full_join, by = "Geneid")
+> # replace NAs with 0
+counts[is.na(counts)] <- 0
+
+# find top 10 genes per sample
+top_genes <- unique(c(
+  head(counts[order(-counts$DRR034563), "Geneid"], 10),
+  head(counts[order(-counts$DRR034568), "Geneid"], 10),
+  head(counts[order(-counts$DRR034570), "Geneid"], 10)
+))
+
+# subset top genes
+top_counts <- counts %>% filter(Geneid %in% top_genes)
+row.names(top_counts) <- top_counts$Geneid
+top_counts <- top_counts[,-1]
+
+# log-transform counts
+mat <- log2(top_counts + 1)
+
+# create a heatmap
+pheatmap(mat,
+         scale = "row",
+         clustering_distance_rows = "euclidean",
+         clustering_distance_cols = "euclidean",
+         clustering_method = "complete",
+         color = colorRampPalette(c("navy", "white", "firebrick3"))(50),
+         main = "Top 10 Expressed Genes per Sample")
+
 ```
 
-and the Heat map of top 10 predicted gene function
+For the Heat map of top 10 predicted gene function paste the following:
 
 ```bash
+# get top 10 by expression per sample
+top_genes <- unique(c(
+  head(counts_annot[order(-counts_annot$DRR034563), "Geneid"], 10),
+  head(counts_annot[order(-counts_annot$DRR034568), "Geneid"], 10),
+  head(counts_annot[order(-counts_annot$DRR034570), "Geneid"], 10)
+))
 
+# subset to just those
+counts_top <- counts_annot[counts_annot$Geneid %in% top_genes, ]
+
+# fix row names
+rownames(counts_top) <- make.unique(ifelse(is.na(counts_top$product),
+                                           counts_top$Geneid,
+                                           counts_top$product))
+
+# plot
+mat <- as.matrix(counts_top[, c("DRR034563", "DRR034568", "DRR034570")])
+pheatmap(mat,
+         scale = "row",
+         cluster_rows = TRUE,
+         cluster_cols = TRUE,
+         fontsize_row = 6,
+         fontsize_col = 10,
+         main = "Top 10 Expressed Genes per Sample (Annotated by Product)")
 
 
 ```
