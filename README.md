@@ -269,6 +269,8 @@ display mapping_percentage.png
 ```
 
 # Heat Map
+
+## the first try of making the heat map 
 Install R and then install the following packages to R to make the heat map from the featured gene counts.
 ```bash 
 install.packages(c("dplyr", "tidyr", "ggplot2", "pheatmap"))
@@ -290,6 +292,8 @@ library(ggplot2)
 library(pheatmap)
 
 ```
+This is what outputs the featured count file
+
 ```bash
 # merge
 counts <- f1 %>%
@@ -332,10 +336,28 @@ pheatmap(log2(top10 + 1),
          legend = TRUE,
          legend_labels = "Expression Level (log2 scaled)")
 ```
+## the second try at making the heat map
+
+using the following files
+
+featureCounts_DRR034563.txt
+featureCounts_DRR034568.txt
+featureCounts_DRR034570.txt
+
+```bash
+library(dplyr)
+library(purrr)
+library(pheatmap)
+
+```
+
+and the Heat map of top 10 predicted gene function
+
+```bash
 
 
 
-
+```
 
 
 
