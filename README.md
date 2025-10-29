@@ -387,11 +387,27 @@ pheatmap(mat,
          main = "Top 10 Expressed Genes per Sample")
 
 ```
+Extra efforts are in the following code block that uses the .gff3 files output from prokka on galaxy to be able to get the predicted gene outputs before we build another heat map with the predicted gene fuctions.
+
+```bash
+library(dplyr)
+
+#keep only CDS features
+ann_genes <- ann[ann$V3 == "CDS", ]
+
+#extract locus_tag and product text from column 9
+ann_genes <- ann_genes %>%
+  mutate(locus_tag = sub(".*locus_tag=([^;]+);.*", "\\1", V9),
+         product = sub(".*product=([^;]+)", "\\1", V9)) %>%
+  select(locus_tag, product)
+
+head(ann_genes)
+```
 
 For the Heat map of top 10 predicted gene function paste the following:
 
 ```bash
-# get top 10 by expression per sample
+#to top 10 by expression per sample
 top_genes <- unique(c(
   head(counts_annot[order(-counts_annot$DRR034563), "Geneid"], 10),
   head(counts_annot[order(-counts_annot$DRR034568), "Geneid"], 10),
@@ -415,8 +431,6 @@ pheatmap(mat,
          fontsize_row = 6,
          fontsize_col = 10,
          main = "Top 10 Expressed Genes per Sample (Annotated by Product)")
-
-
 ```
 
 
