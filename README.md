@@ -71,6 +71,7 @@ fastp \
   -j ~/BIFS_619_Group_Project/raw_data/DRR034563.json \
   --length_required 50
 ```
+
 ```bash
 #move the clean files into cleaned_reads
 mv ~/BIFS_619_Group_Project/raw_data/*.clean.fastq ~/BIFS_619_Group_Project/cleaned_reads
@@ -102,7 +103,9 @@ Then command editing usign nano
 # execute this command in terminal
 nano run_all_spades.sh
 ```
+
 This will pull up a text editor, you can copy the following directly into the edit page
+
 
 ```bash
 #!/bin/bash
@@ -129,6 +132,7 @@ for sample in "${SAMPLES[@]}"; do
         -m 12
 done
 ```
+
 To exit do Crtl O, Enter, Crtl X
 
 Execute command in terminal 
@@ -145,6 +149,8 @@ nohup ./run_all_spades.sh > batch_spades.log 2>&1 &
  Now you wait around 8 hours.. or less if you have more CPU than I do. 
 
 QUAST
+
+
 ```bash
 #evaluating assembly quality
 #in the quast directory I entered the following
@@ -182,6 +188,8 @@ hisat2-build contigs.fasta DRR034563_index
 # HISAT2 Alignment 
 This step aligns the cleaned RNA-seq reads against the assembled
 E. coli contigs (from SPAdes) using the HISAT2 indices created earlier. Repeat the following for each sample in their respective directories.
+
+
 ```bash 
 #Example running for sample DRR034568
 cd ~/BIFS_619_Group_Project/02_spades_assembly/DRR034568 
@@ -193,10 +201,13 @@ hisat2 -x DRR034568_index \
   -S DRR034568.sam \
   -p 6 
 ```
+
+
 hisat2_${ID}.log → run summary with % alignment, read counts, etc.
 
 This step was repeated for DRR034568 and DRR034570 to generate the .sam files.
 The disk space is very limited so the .sam file is converted to .bam and removed for space. Then the .bam can be sorted. 
+
 ```bash
 samtools view -bS -o DRR034568.bam DRR034568.sam
 samtools sort -o DRR034568_sorted.bam DRR034568.bam
@@ -207,7 +218,10 @@ mv DRR034568_sorted.bam ~/BIFS_619_Group_Project/sorted_bam
 
 #repeated for DRR034563 and DRR034570
 ```
+
 ### Alignment rate per sample
+
+
 ```bash
 cd ~/BIFS_619_Group_Project/sorted_bam
 #in the sorted_bam directory, copy and past the following to generate each sample_flagstat.txt
@@ -292,7 +306,38 @@ library(ggplot2)
 library(pheatmap)
 
 ```
-This is what outputs the featured count file
+
+we used a short bash script to create a .saf file from each feature count text file. This was necessary because he .gff3 files output from galaxy had minor formatting discrepancies that prevented proper parsing by feature counts.
+
+
+```bash
+set -e
+cd ~/BIFS_619_Group_Project/04_prokka_annotation/DRR034570
+
+#build SAF file from GFF3
+awk -F'\t' '
+BEGIN{OFS="\t"}
+$3=="CDS"{
+  split($9,a,";")
+  for(i in a){
+    if(a[i] ~ /^locus_tag=/){
+      sub(/^locus_tag=/,"",a[i])
+      print a[i], $1, $4, $5, $7
+    }
+  }
+}' DRR034570.gff3 > DRR034570.saf
+
+#add header
+sed -i '1iGeneID\tChr\tStart\tEnd\tStrand' DRR034570.saf
+
+#run featurecounts
+featureCounts -T 6 -p -s 0 -F SAF \
+  -a DRR034570.saf \
+  -o featureCounts_DRR034570_saf.txt \
+  ~/BIFS_619_Group_Project/02_spades_assembly/DRR034570/DRR034570.sorted.bam
+```
+
+This is what outputs of top 10 geens expressed
 
 ```bash
 # merge
